@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Reporte XM</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <nav class="app-sidebar" aria-label="Modulos">
+      <button id="sidebarToggle" class="sidebar-toggle" type="button" aria-label="Ocultar o mostrar menu">
+        <span class="button-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
+        </span>
+        <span class="sidebar-toggle-label">Menu</span>
+      </button>
+      <div class="brand-block">
+        <strong>Reporte Mensual</strong>
+        <span>Automatizaciones</span>
+      </div>
+      <a class="nav-item" href="/">
+        <span class="nav-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z" /></svg>
+        </span>
+        <span class="nav-label">Dashboard</span>
+      </a>
+      <a class="nav-item active" href="/xm">
+        <span class="nav-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><path d="M14 2v6h6M8 13h8M8 17h8M8 9h2" /></svg>
+        </span>
+        <span class="nav-label">Reporte XM</span>
+      </a>
+      <a class="nav-item" href="/helpdesk">
+        <span class="nav-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M4 14v-2a8 8 0 0 1 16 0v2" /><path d="M4 14h3v5H4zM17 14h3v5h-3zM13 21h2a5 5 0 0 0 5-5" /></svg>
+        </span>
+        <span class="nav-label">Helpdesk Freshdesk</span>
+      </a>
+    </nav>
+
+    <div class="app-content">
+      <header class="app-header">
+        <h1>Automatizacion Reporte XM</h1>
+        <p>Genera las tablas XM, actualiza el comparativo y arma el informe Word mensual.</p>
+      </header>
+
+      <main class="layout">
+        <section class="form-panel">
+          <form id="runForm">
+            <div class="group">
+              <div class="group-title">
+                <h2>Archivos XM requeridos</h2>
+                <span class="badge">Obligatorio</span>
+              </div>
+
+              <div class="field">
+                <label for="summary">XM Summary</label>
+                <input id="summary" name="summary" type="file" accept=".xlsx,.xlsm" required />
+                <p class="hint">Archivo exportado de summary, por ejemplo: XM-summary-2026-07.xlsx.</p>
+              </div>
+
+              <div class="field">
+                <label for="instances">XM Instances</label>
+                <input id="instances" name="instances" type="file" accept=".xlsx,.xlsm" required />
+                <p class="hint">Archivo exportado de instances, por ejemplo: XM-Instances-2026-07.xlsx.</p>
+              </div>
+            </div>
+
+            <div class="group optional">
+              <div class="group-title">
+                <h2>Comparativo</h2>
+                <span class="badge soft">Opcional</span>
+              </div>
+
+              <div class="field">
+                <label for="comparativo">Comparativo base</label>
+                <input id="comparativo" name="comparativo" type="file" accept=".xlsx,.xlsm" />
+                <p class="hint">Adjuntalo si tambien quieres agregar la data automatizada al comparativo.</p>
+              </div>
+
+              <div id="monthFallback" class="field hidden">
+                <label for="mesManual">Mes a agregar</label>
+                <input id="mesManual" name="mes_manual" type="text" placeholder="Ejemplo: Jul-26" />
+                <p class="hint">Solo aparece si no se puede reconocer el mes desde el nombre de los archivos XM.</p>
+              </div>
+
+              <div id="monthDetected" class="detected-month">
+                Mes detectado: <strong>Pendiente</strong>
+              </div>
+            </div>
+
+            <div class="group optional">
+              <div class="group-title">
+                <h2>Informe Word</h2>
+                <span class="badge soft">Opcional</span>
+              </div>
+
+              <div class="field">
+                <label for="resourceImage">Imagen CONSUMO POR RECURSO</label>
+                <input id="resourceImage" name="resource_images" type="file" accept=".png,.jpg,.jpeg" multiple />
+                <p class="hint">Puedes adjuntar una o mas imagenes. Se insertan en el documento en el mismo orden de seleccion.</p>
+                <div id="resourcePreview" class="image-preview"></div>
+              </div>
+            </div>
+
+            <div class="actions">
+              <button id="submitBtn" type="submit">Generar archivos</button>
+              <button class="secondary" type="reset">Limpiar</button>
+            </div>
+          </form>
+        </section>
+
+        <aside class="side-panel">
+          <h2>Resultado</h2>
+          <div id="status" class="status">Selecciona los archivos XM para comenzar.</div>
+          <div id="downloads" class="downloads"></div>
+
+          <div class="checklist">
+            <div><strong>Summary</strong><span>Archivo separado</span></div>
+            <div><strong>Instances</strong><span>Archivo separado</span></div>
+            <div><strong>Comparativo</strong><span>Solo si adjuntas base</span></div>
+            <div><strong>Informe Word</strong><span>Plantilla fija</span></div>
+          </div>
+
+          <h2 class="side-title">Flujo</h2>
+          <ol>
+            <li>Carga los dos archivos XM.</li>
+            <li>Adjunta el comparativo base si aplica.</li>
+            <li>Adjunta la imagen de consumo por recurso si aplica.</li>
+            <li>Descarga los archivos generados.</li>
+          </ol>
+        </aside>
+      </main>
+    </div>
+  </div>
+
+  <div id="duplicateModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="duplicateTitle">
+    <div class="modal-panel">
+      <h2 id="duplicateTitle">Mes ya existente</h2>
+      <p id="duplicateMessage">El comparativo ya contiene ese mes.</p>
+      <div class="modal-actions">
+        <button id="updateExisting" type="button">Actualizar informacion</button>
+        <button id="addDuplicate" class="secondary" type="button">Agregar otro bloque</button>
+        <button id="cancelDuplicate" class="ghost" type="button">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="processModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="processTitle">
+    <div class="modal-panel process-panel">
+      <h2 id="processTitle">Generando archivos</h2>
+      <p id="processMessage">Preparando la automatizacion...</p>
+      <div class="process-list">
+        <div class="process-step" data-step="summary">
+          <span class="step-icon"></span>
+          <strong>XM Summary</strong>
+          <small>Generando archivo separado</small>
+        </div>
+        <div class="process-step" data-step="instances">
+          <span class="step-icon"></span>
+          <strong>XM Instances</strong>
+          <small>Generando archivo separado</small>
+        </div>
+        <div class="process-step" data-step="comparativo">
+          <span class="step-icon"></span>
+          <strong>Comparativo</strong>
+          <small>Agregando data y actualizando graficos</small>
+        </div>
+        <div class="process-step" data-step="word">
+          <span class="step-icon"></span>
+          <strong>Informe Word</strong>
+          <small>Insertando imagenes e interpretacion</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/app.js?v=20260706-5"></script>
+</body>
+</html>

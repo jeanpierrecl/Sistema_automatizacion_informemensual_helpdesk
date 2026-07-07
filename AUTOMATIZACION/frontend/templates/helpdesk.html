@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Helpdesk Freshdesk</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <nav class="app-sidebar" aria-label="Modulos">
+      <button id="sidebarToggle" class="sidebar-toggle" type="button" aria-label="Ocultar o mostrar menu">
+        <span class="button-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
+        </span>
+        <span class="sidebar-toggle-label">Menu</span>
+      </button>
+      <div class="brand-block">
+        <strong>Reporte Mensual</strong>
+        <span>Automatizaciones</span>
+      </div>
+      <a class="nav-item" href="/">
+        <span class="nav-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z" /></svg>
+        </span>
+        <span class="nav-label">Dashboard</span>
+      </a>
+      <a class="nav-item" href="/xm">
+        <span class="nav-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><path d="M14 2v6h6M8 13h8M8 17h8M8 9h2" /></svg>
+        </span>
+        <span class="nav-label">Reporte XM</span>
+      </a>
+      <a class="nav-item active" href="/helpdesk">
+        <span class="nav-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M4 14v-2a8 8 0 0 1 16 0v2" /><path d="M4 14h3v5H4zM17 14h3v5h-3zM13 21h2a5 5 0 0 0 5-5" /></svg>
+        </span>
+        <span class="nav-label">Helpdesk Freshdesk</span>
+      </a>
+    </nav>
+
+    <div class="app-content">
+      <header class="app-header">
+        <h1>Helpdesk Freshdesk</h1>
+        <p>Consulta tickets por rango de fechas y genera el informe Word de soporte.</p>
+      </header>
+
+      <main class="layout">
+        <section class="form-panel">
+          <form id="helpdeskForm">
+            <div class="group">
+              <div class="group-title">
+                <h2>Freshdesk</h2>
+              </div>
+
+              <div class="field-grid">
+                <div class="field">
+                  <label for="fechaInicio">Fecha inicio</label>
+                  <input id="fechaInicio" name="fecha_inicio" type="date" required />
+                </div>
+                <div class="field">
+                  <label for="fechaFin">Fecha fin</label>
+                  <input id="fechaFin" name="fecha_fin" type="date" required />
+                </div>
+              </div>
+            </div>
+
+            <div class="group optional">
+              <div class="group-title">
+                <h2>Informe base</h2>
+                <span class="badge soft">Opcional</span>
+              </div>
+              <div class="field">
+                <label for="helpdeskBase">Word existente o plantilla</label>
+                <input id="helpdeskBase" name="helpdesk_base" type="file" accept=".docx" />
+                <p class="hint">Si adjuntas un informe existente, se conservaran sus tickets y solo se agregaran los faltantes por ID.</p>
+              </div>
+            </div>
+            <div class="actions">
+              <button id="helpdeskSubmitBtn" type="submit">Generar informe Helpdesk</button>
+              <button class="secondary" type="reset">Limpiar</button>
+            </div>
+          </form>
+        </section>
+
+        <aside class="side-panel">
+          <h2>Resultado Helpdesk</h2>
+          <div id="helpdeskStatus" class="status">Configura el rango de fechas para consultar Freshdesk.</div>
+          <div id="helpdeskDownloads" class="downloads"></div>
+
+
+          <h2 class="side-title">Automatiza</h2>
+          <ol>
+            <li>Consulta tickets creados en el periodo.</li>
+            <li>Filtra por responsable asignado.</li>
+            <li>Agrega solo tickets que no existan en el Word.</li>
+            <li>Calcula conteos basicos y estados.</li>
+          </ol>
+        </aside>
+      </main>
+    </div>
+  </div>
+
+  <script src="/static/app.js?v=20260706-5"></script>
+</body>
+</html>
